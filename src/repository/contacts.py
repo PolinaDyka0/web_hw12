@@ -44,13 +44,15 @@ def delete_contact(db: Session, contact_id: int, user: User) -> Contact:
     return db_contact
 
 
-def search_contacts(db: Session, query: str, user: User) -> List[Contact]:
+def search_contacts(db: Session, query: str) -> List[Contact]:
     if not query:
         return []
-    return db.query(Contact).filter(Contact.user_id == user.id).filter(or_(
+    return db.query(Contact).filter(or_(
         Contact.first_name.ilike(f"%{query}%"),
         Contact.last_name.ilike(f"%{query}%"),
         Contact.email.ilike(f"%{query}%"),
+        Contact.additional_info.ilike(f"%{query}%"),
+        Contact.phone.ilike(f"%{query}%"),
     )).all()
 
 
